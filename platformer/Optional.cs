@@ -17,7 +17,6 @@ namespace platformer
                 if (HasValue) { return _Value; }
                 else { throw new System.Exception("OPTIONAL ERROR: Attempting to read the value of an Optional<T> with no value"); }
             }
-        
         }
 
         public Optional()

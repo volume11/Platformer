@@ -17,6 +17,7 @@ namespace platformer
             Raylib.SetTargetFPS(200);
 
             AssetManager.Init();
+            PersistentData.Load();
 
             //----TEST CODE----
             queuedScreen = new TestScreen();

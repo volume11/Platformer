@@ -6,8 +6,6 @@ namespace platformer.screens
     {
         public event ScreenChangeEvent ChangeScreen;
 
-        int score;
-
         public void Start()
         {
             SoundManager.PlayMusic("bgm");
@@ -17,7 +15,7 @@ namespace platformer.screens
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
             {
-                score += 1;
+                PersistentData.Score += 1;
                 SoundManager.PlaySound("sound");
             }
 
@@ -34,12 +32,22 @@ namespace platformer.screens
             {
                 SoundManager.SetVolume(1);
             }
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_S))
+            {
+                PersistentData.Save();
+            }
+
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_L))
+            {
+                PersistentData.Load();
+            }
         }
 
         public void Render()
         {
             Raylib.DrawText("Hello world!", 10, 10, 30, Color.BLACK);
-            Raylib.DrawText($"Score: {score}", 10, 50, 20, Color.BLACK);
+            Raylib.DrawText($"Score: {PersistentData.Score}", 10, 50, 20, Color.BLACK);
             Raylib.DrawTexture(AssetManager.getTexture("test").Value, 50, 50, Color.WHITE);
         }
     }

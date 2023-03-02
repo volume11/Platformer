@@ -20,7 +20,7 @@ namespace platformer
             PersistentData.Load();
 
             //----TEST CODE----
-            queuedScreen = new TestScreen();
+            queuedScreen = new LevelScreen();
             //-----------------
 
             while (!Raylib.WindowShouldClose())
@@ -49,8 +49,10 @@ namespace platformer
                 currentScreen.Update();
 
                 Raylib.BeginDrawing();
-                Raylib.ClearBackground(Color.WHITE);
+                Raylib.ClearBackground(Color.RAYWHITE);
                 currentScreen.Render();
+
+                Raylib.DrawFPS(0, 0);
                 Raylib.EndDrawing();
 
                 Raylib.UpdateMusicStream(SoundManager.currentTrack);

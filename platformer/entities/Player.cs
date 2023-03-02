@@ -13,6 +13,7 @@ namespace platformer.entities
 
         public Vector2 CollisionBoxSize => new Vector2(20, 20);
         public bool IsOnGround {get; set;}
+        public bool IsOnWall {get; set;}
 
         float speed = 100;
         float jumpAcceleration = 200;
@@ -20,6 +21,19 @@ namespace platformer.entities
         public void Update()
         {
             Velocity += new Vector2(0, 1f);
+
+            if (IsOnWall)
+            {
+                if (Velocity.Y > 0)
+                {
+                    Velocity = new Vector2(Velocity.X, 10f);
+                }
+
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
+                {
+                    Velocity = new Vector2(Velocity.X, -jumpAcceleration);
+                }
+            }
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {

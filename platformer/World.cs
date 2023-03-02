@@ -45,6 +45,8 @@ namespace platformer
                 {
                     IPhysics physics = entity as IPhysics;
 
+                    physics.IsOnWall = false;
+
                     //TILEMAP COLLISION
                     for (int i = 1; i <= 4; i++)
                     {
@@ -56,6 +58,7 @@ namespace platformer
                         else
                         {
                             physics.Velocity = new Vector2(0, physics.Velocity.Y);
+                            physics.IsOnWall = true;
                             continue;
                         }
                     }

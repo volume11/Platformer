@@ -12,6 +12,7 @@ namespace platformer.entities
 
         public Vector2 CollisionBoxSize => new Vector2(40, 40);
         public bool IsOnGround {get; set;}
+        public bool IsOnWall {get; set;}
 
         public void Render()
         {

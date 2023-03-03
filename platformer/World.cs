@@ -16,6 +16,8 @@ namespace platformer
         Player player;
         Camera2D camera;
 
+        Vector2 gravity = new Vector2(0, 1.8f);
+
         public World()
         {
             entityContainer = new EntityContainer(this);
@@ -44,6 +46,8 @@ namespace platformer
                 if (entity is IPhysics)
                 {
                     IPhysics physics = entity as IPhysics;
+
+                    physics.Velocity += gravity;
 
                     physics.IsOnWall = false;
 

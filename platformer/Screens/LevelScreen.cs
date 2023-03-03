@@ -13,7 +13,7 @@ namespace platformer.screens
 
         public void Start()
         {
-            SoundManager.PlayMusic("bgm");
+            //SoundManager.PlayMusic("bgm");
         }
 
         public void Update()

@@ -9,6 +9,7 @@ namespace platformer.entities
         Vector2 Velocity {get; set;}
         Vector2 CollisionBoxSize {get;}
         bool IsOnGround {get; set;}
+        bool IsOnWall {get; set;}
 
         void PhysicsBodyCollided(IEntity body) {}
     }

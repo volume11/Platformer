@@ -32,11 +32,11 @@ namespace platformer
 
                 if (tiles[i] == 0)
                 {
-                    Raylib.DrawRectangle(x, y, tileSize, tileSize, Color.WHITE);
+                    Raylib.DrawRectangleV(new Vector2(x, y), new Vector2(20), Color.WHITE);
                 }
                 else
                 {
-                    Raylib.DrawRectangle(x, y, tileSize, tileSize, Color.BLACK);
+                    Raylib.DrawRectangleV(new Vector2(x, y), new Vector2(20), Color.BLACK);
                 }
             }
         }

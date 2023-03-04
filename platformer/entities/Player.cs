@@ -1,4 +1,5 @@
 using System.Numerics;
+using System;
 
 using Raylib_cs;
 
@@ -9,34 +10,78 @@ namespace platformer.entities
         public World World {get; set;}
         public Vector2 Position {get; set;}
 
-        public Vector2 Velocity {get; set;}
+        Vector2 _Velocity;
+        public Vector2 Velocity {get => _Velocity; set => _Velocity = value; }
 
-        public Vector2 CollisionBoxSize => new Vector2(20, 20);
+        public Vector2 CollisionBoxSize => new Vector2(20, 40);
         public bool IsOnGround {get; set;}
+        public bool IsOnWall {get; set;}
 
-        float speed = 100;
-        float jumpAcceleration = 200;
+        float acceleration = 15;
+        float airAcceleration = 2;
+        float jumpAcceleration = 220;
+        float wallSlide = 10;
+        float maxSpeed = 200;
+        float groundDrag = 0.95f;
+        float airDrag = 0.98f;
 
         public void Update()
         {
-            Velocity += new Vector2(0, 1f);
+            if (IsOnWall)
+            {
+                if (Velocity.Y > 0)
+                {
+                    _Velocity.Y = wallSlide;
+                }
+
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
+                {
+                    _Velocity = new Vector2(maxSpeed, -jumpAcceleration);
+                }
+            }
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
-                Velocity = new Vector2(Velocity.X, -jumpAcceleration);
+                _Velocity.Y += -jumpAcceleration;
             }
+
+            float dir = 0;
 
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
-                Velocity = new Vector2(-speed, Velocity.Y);
+                dir -= 1;
             }
             else if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
-                Velocity = new Vector2(speed, Velocity.Y);
+                dir += 1;
+            }
+
+            if (IsOnGround)
+            {
+                _Velocity.X += dir * acceleration;
+
+                if (dir == 0)
+                {
+                    _Velocity.X *= groundDrag;
+                }
             }
             else
             {
-                Velocity = new Vector2(0, Velocity.Y);
+                _Velocity.X += dir * airAcceleration;
+                
+                if (dir == 0)
+                {
+                    _Velocity.X *= airDrag;
+                }
+            }
+
+            if (Velocity.X > maxSpeed)
+            {
+                _Velocity.X = maxSpeed;
+            }
+            if (Velocity.X < -maxSpeed)
+            {
+                _Velocity.X = -maxSpeed;
             }
         }
 
@@ -47,7 +92,14 @@ namespace platformer.entities
 
         public void PhysicsBodyCollided(IEntity body)
         {
-            World.entityContainer.RemoveEntity(body);
+            if (body is Coin)
+            {
+                if (Velocity.Y > 0)
+                {
+                    World.entityContainer.RemoveEntity(body);
+                    _Velocity.Y = -100;
+                }
+            }
         }
     }
 }

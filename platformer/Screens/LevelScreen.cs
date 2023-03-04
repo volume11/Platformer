@@ -11,6 +11,11 @@ namespace platformer.screens
             world = new World();
         }
 
+        public void Start()
+        {
+            //SoundManager.PlayMusic("bgm");
+        }
+
         public void Update()
         {
             world.Update();

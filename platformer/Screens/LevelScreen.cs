@@ -1,3 +1,5 @@
+using Raylib_cs;
+
 namespace platformer.screens
 {
     class LevelScreen : IScreen
@@ -24,6 +26,8 @@ namespace platformer.screens
         public void Render()
         {
             world.Render();
+
+            Raylib.DrawText($"Score: {PersistentData.Score}", 40, 40, 40, Color.BLACK);
         }
     }
 }

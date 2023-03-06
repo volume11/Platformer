@@ -30,52 +30,46 @@ namespace platformer.entities
         {
             if (IsOnLeftWall || IsOnRightWall)
             {
+                //Falling downwards -> wallslide
                 if (Velocity.Y > 0)
                 {
                     _Velocity.Y = wallSlide;
                 }
 
+                //On a wall and jumping -> walljump
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
                 {
                     _Velocity = new Vector2(maxSpeed * (IsOnLeftWall ? 1 : -1), -jumpAcceleration);
                 }
             }
 
+            //On ground and jumping -> jump
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
                 _Velocity.Y += -jumpAcceleration;
             }
 
-            float dir = 0;
 
+            float movementDirection = 0;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
-                dir -= 1;
+                movementDirection -= 1;
             }
             else if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
-                dir += 1;
+                movementDirection += 1;
             }
 
-            if (IsOnGround)
+            //Accelerate in a direction
+            _Velocity.X += movementDirection * IsOnGround ? acceleration : airAcceleration;
+
+            //Apply drag if the user has not made an input
+            if (movementDirection == 0)
             {
-                _Velocity.X += dir * acceleration;
-
-                if (dir == 0)
-                {
-                    _Velocity.X *= groundDrag;
-                }
-            }
-            else
-            {
-                _Velocity.X += dir * airAcceleration;
-                
-                if (dir == 0)
-                {
-                    _Velocity.X *= airDrag;
-                }
+                _Velocity.X *= IsOnGround ? groundDrag : airDrag;
             }
 
+            //Cap player velocity to a max speed in either direction
             if (Velocity.X > maxSpeed)
             {
                 _Velocity.X = maxSpeed;

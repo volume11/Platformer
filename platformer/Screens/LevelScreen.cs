@@ -27,7 +27,7 @@ namespace platformer.screens
         {
             world.Render();
 
-            Raylib.DrawText($"Score: {PersistentData.Score}", 40, 40, 40, Color.BLACK);
+            Raylib.DrawText($"Score: {PersistentData.Score}", 40, 40, 10, Color.BLACK);
         }
     }
 }

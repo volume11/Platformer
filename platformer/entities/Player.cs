@@ -19,11 +19,11 @@ namespace platformer.entities
         public bool IsOnRightWall {get; set;}
 
         float acceleration = 15;
-        float airAcceleration = 2;
-        float jumpAcceleration = 220;
+        float airAcceleration = 3;
+        float jumpAcceleration = 300;
         float wallSlide = 10;
         float maxSpeed = 200;
-        float groundDrag = 0.95f;
+        float groundDrag = 0.8f;
         float airDrag = 0.98f;
 
         public void Update()
@@ -43,7 +43,7 @@ namespace platformer.entities
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
-                _Velocity.Y += -jumpAcceleration;
+                _Velocity.Y = -jumpAcceleration;
             }
 
             float dir = 0;

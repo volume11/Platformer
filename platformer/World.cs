@@ -16,7 +16,7 @@ namespace platformer
         Player player;
         Camera2D camera;
 
-        Vector2 gravity = new Vector2(0, 1.8f);
+        Vector2 gravity = new Vector2(0, 3f);
 
         public World()
         {
@@ -24,6 +24,7 @@ namespace platformer
 
             //Test Code
             player = new Player();
+            player.Position = new Vector2(20, 600);
             entityContainer.AddEntity(player);
 
             Coin c = new Coin();
@@ -33,14 +34,22 @@ namespace platformer
             tilemap = new Tilemap(50, 50, 20);
             camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, player.Position, 0, 1);
 
-            Enemy e = new Enemy();
-            e.Position = new Vector2(100, 100);
-            entityContainer.AddEntity(e);
+            //Enemy e = new Enemy();
+            //e.Position = new Vector2(100, 100);
+            //entityContainer.AddEntity(e);
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 40; i++)
             {
                 tilemap.Tiles[50 * i + 6] = 1;
             }
+
+            tilemap.Tiles[50 * 49 + 10] = 1;
+
+            tilemap.Tiles[50 * 48 + 15] = 1;
+            tilemap.Tiles[50 * 49 + 15] = 1;
+
+            tilemap.Tiles[50 * 48 + 22] = 1;
+            tilemap.Tiles[50 * 49 + 22] = 1;
         }
 
         public void Update()

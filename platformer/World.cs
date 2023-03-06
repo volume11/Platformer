@@ -37,7 +37,10 @@ namespace platformer
             e.Position = new Vector2(100, 100);
             entityContainer.AddEntity(e);
 
-            tilemap.Tiles[100 * 5 + 5] = 1;
+            for (int i = 0; i < 50; i++)
+            {
+                tilemap.Tiles[50 * i + 6] = 1;
+            }
         }
 
         public void Update()

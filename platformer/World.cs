@@ -33,6 +33,10 @@ namespace platformer
             tilemap = new Tilemap(50, 50, 20);
             camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, player.Position, 0, 1);
 
+            Enemy e = new Enemy();
+            e.Position = new Vector2(100, 100);
+            entityContainer.AddEntity(e);
+
             tilemap.Tiles[100 * 5 + 5] = 1;
         }
 
@@ -43,13 +47,14 @@ namespace platformer
                 entity.Update();
 
                 
-                if (entity is IPhysics)
+                if (entity is IKinematicBody)
                 {
-                    IPhysics physics = entity as IPhysics;
+                    IKinematicBody physics = entity as IKinematicBody;
 
                     physics.Velocity += gravity;
 
-                    physics.IsOnWall = false;
+                    physics.IsOnLeftWall = false;
+                    physics.IsOnRightWall = false;
 
                     //TILEMAP COLLISION
                     for (int i = 1; i <= 4; i++)
@@ -61,8 +66,11 @@ namespace platformer
                         }
                         else
                         {
+                            physics.IsOnLeftWall = physics.Velocity.X < 0;
+                            physics.IsOnRightWall = !physics.IsOnLeftWall;
+
                             physics.Velocity = new Vector2(0, physics.Velocity.Y);
-                            physics.IsOnWall = true;
+
                             continue;
                         }
                     }
@@ -83,15 +91,20 @@ namespace platformer
                             continue;
                         }
                     }
+                }
+
+                if (entity is ICollidingBody)
+                {
+                    ICollidingBody physics = entity as ICollidingBody;
 
                     //ENTITY COLLISION
                     foreach (IEntity othere in entityContainer.Entities)
                     {
                         if (othere == entity) continue;
 
-                        if (othere is IPhysics)
+                        if (othere is ICollidingBody)
                         {
-                            IPhysics otherPhysics = othere as IPhysics;
+                            ICollidingBody otherPhysics = othere as ICollidingBody;
 
                             Rectangle rec1 = new Rectangle(physics.Position.X, physics.Position.Y, physics.CollisionBoxSize.X, physics.CollisionBoxSize.Y);
                             Rectangle rec2 = new Rectangle(otherPhysics.Position.X, otherPhysics.Position.Y, otherPhysics.CollisionBoxSize.X, otherPhysics.CollisionBoxSize.Y);

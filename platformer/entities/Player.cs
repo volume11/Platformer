@@ -5,7 +5,7 @@ using Raylib_cs;
 
 namespace platformer.entities
 {
-    class Player : IEntity, IPhysics
+    class Player : IEntity, IKinematicBody
     {
         public World World {get; set;}
         public Vector2 Position {get; set;}
@@ -15,7 +15,8 @@ namespace platformer.entities
 
         public Vector2 CollisionBoxSize => new Vector2(20, 40);
         public bool IsOnGround {get; set;}
-        public bool IsOnWall {get; set;}
+        public bool IsOnLeftWall {get; set;}
+        public bool IsOnRightWall {get; set;}
 
         float acceleration = 15;
         float airAcceleration = 2;
@@ -27,54 +28,48 @@ namespace platformer.entities
 
         public void Update()
         {
-            if (IsOnWall)
+            if (IsOnLeftWall || IsOnRightWall)
             {
+                //Falling downwards -> wallslide
                 if (Velocity.Y > 0)
                 {
                     _Velocity.Y = wallSlide;
                 }
 
+                //On a wall and jumping -> walljump
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
                 {
-                    _Velocity = new Vector2(maxSpeed, -jumpAcceleration);
+                    _Velocity = new Vector2(maxSpeed * (IsOnLeftWall ? 1 : -1), -jumpAcceleration);
                 }
             }
 
+            //On ground and jumping -> jump
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
-                _Velocity.Y += -jumpAcceleration;
+                _Velocity.Y = -jumpAcceleration;
             }
 
-            float dir = 0;
 
+            float movementDirection = 0;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
-                dir -= 1;
+                movementDirection -= 1;
             }
             else if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
-                dir += 1;
+                movementDirection += 1;
             }
 
-            if (IsOnGround)
+            //Accelerate in a direction
+            _Velocity.X += movementDirection * (IsOnGround ? acceleration : airAcceleration);
+
+            //Apply drag if the user has not made an input
+            if (movementDirection == 0)
             {
-                _Velocity.X += dir * acceleration;
-
-                if (dir == 0)
-                {
-                    _Velocity.X *= groundDrag;
-                }
-            }
-            else
-            {
-                _Velocity.X += dir * airAcceleration;
-                
-                if (dir == 0)
-                {
-                    _Velocity.X *= airDrag;
-                }
+                _Velocity.X *= IsOnGround ? groundDrag : airDrag;
             }
 
+            //Cap player velocity to a max speed in either direction
             if (Velocity.X > maxSpeed)
             {
                 _Velocity.X = maxSpeed;
@@ -94,10 +89,19 @@ namespace platformer.entities
         {
             if (body is Coin)
             {
+                World.entityContainer.RemoveEntity(body);
+            }
+  
+            if (body is Enemy)
+            {
                 if (Velocity.Y > 0)
                 {
                     World.entityContainer.RemoveEntity(body);
                     _Velocity.Y = -100;
+                }
+                else
+                {
+                    World.entityContainer.RemoveEntity(this);
                 }
             }
         }

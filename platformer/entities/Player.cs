@@ -46,7 +46,7 @@ namespace platformer.entities
             //On ground and jumping -> jump
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
-                _Velocity.Y += -jumpAcceleration;
+                _Velocity.Y = -jumpAcceleration;
             }
 
 
@@ -61,7 +61,7 @@ namespace platformer.entities
             }
 
             //Accelerate in a direction
-            _Velocity.X += movementDirection * IsOnGround ? acceleration : airAcceleration;
+            _Velocity.X += movementDirection * (IsOnGround ? acceleration : airAcceleration);
 
             //Apply drag if the user has not made an input
             if (movementDirection == 0)
@@ -91,7 +91,7 @@ namespace platformer.entities
             {
                 World.entityContainer.RemoveEntity(body);
             }
-
+  
             if (body is Enemy)
             {
                 if (Velocity.Y > 0)

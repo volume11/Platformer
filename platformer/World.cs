@@ -66,14 +66,8 @@ namespace platformer
                         }
                         else
                         {
-                            if (physics.Velocity.X < 0)
-                            {
-                                physics.IsOnLeftWall = true;
-                            }
-                            else
-                            {
-                                physics.IsOnRightWall = true;
-                            }
+                            physics.IsOnLeftWall = physics.Velocity.X < 0;
+                            physics.IsOnRightWall = !physics.IsOnLeftWall;
 
                             physics.Velocity = new Vector2(0, physics.Velocity.Y);
 

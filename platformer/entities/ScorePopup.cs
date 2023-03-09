@@ -26,7 +26,7 @@ namespace platformer.entities
                 World.entityContainer.RemoveEntity(this);
             }
 
-            Position += new Vector2(-1, 0) * Raylib.GetFrameTime();
+            Position += new Vector2(0, -10) * Raylib.GetFrameTime();
         }
 
         public void Render()

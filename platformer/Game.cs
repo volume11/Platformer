@@ -31,11 +31,13 @@ namespace platformer
                     {
                         //Unbind previous screen change screen event to avoid it persisting in memory after the screen is changed
                         currentScreen.ChangeScreen -= ChangeScreen;
+                        currentScreen.CloseGame -= EndGame;
                         currentScreen.End();
                     }
 
                     currentScreen = queuedScreen;
                     currentScreen.ChangeScreen += ChangeScreen;
+                    currentScreen.CloseGame += EndGame;
                     queuedScreen = null;
                     currentScreen.Start();
                 }
@@ -62,6 +64,12 @@ namespace platformer
         void ChangeScreen(IScreen screen)
         {
             queuedScreen = screen;
+        }
+
+        void EndGame()
+        {
+            Raylib.CloseWindow();
+            Raylib.CloseAudioDevice();
         }
     }
 }

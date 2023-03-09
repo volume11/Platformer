@@ -96,11 +96,7 @@ namespace platformer.entities
             if (body is Coin)
             {
                 World.entityContainer.RemoveEntity(body);
-                PersistentData.Score += 100;
-
-                ScorePopup p = new ScorePopup(100);
-                p.Position = Position;
-                World.entityContainer.AddEntity(p);
+                World.AddScore(100, body);
             }
 
             if (body is Enemy)
@@ -109,11 +105,7 @@ namespace platformer.entities
                 {
                     World.entityContainer.RemoveEntity(body);
                     _Velocity.Y = -100;
-                    PersistentData.Score += 1000;
-
-                    ScorePopup p = new ScorePopup(1000);
-                    p.Position = Position;
-                    World.entityContainer.AddEntity(p);
+                    World.AddScore(1000, body);
                 }
                 else
                 {

@@ -5,5 +5,6 @@ namespace platformer
         public string levelName;
         public int score;
         public float time;
+        public bool collectable;
     }
 }

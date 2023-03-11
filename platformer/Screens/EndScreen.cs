@@ -26,10 +26,13 @@ namespace platformer.screens
 
         public void Render()
         {
-            Raylib.DrawText($"Score: {data.score}", 10, 10, 20, Color.BLACK);
-            Raylib.DrawText($"Time: {MathF.Round(data.time, 2)}", 10, 35, 20, Color.BLACK);
+            Raylib.DrawText("Level Complete!", 10, 10, 40, Color.BLACK);
 
-            Raylib.DrawText($"Press R to restart", 10, 60, 30, Color.BLACK);
+            Raylib.DrawText($"Score: {data.score}", 10, 60, 20, Color.BLACK);
+            Raylib.DrawText($"Time: {MathF.Round(data.time, 2)}", 10, 85, 20, Color.BLACK);
+            Raylib.DrawText(data.collectable ? "Collectable got!" : "Collectable missed!", 200, 60, 20, Color.BLACK);
+
+            Raylib.DrawText($"Press R to restart", 10, 110, 30, Color.BLACK);
         }
     }
 }

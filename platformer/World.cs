@@ -33,11 +33,11 @@ namespace platformer
             player.Position = new Vector2(20, 600);
             entityContainer.AddEntity(player);
 
-            Coin c = new Coin();
-            c.Position = new Vector2(100, 100);
-            entityContainer.AddEntity(c);
+            Collectable col = new Collectable();
+            col.Position = new Vector2(90, 90);
+            entityContainer.AddEntity(col);
 
-            c = new Coin();
+            Coin c = new Coin();
             c.Position = new Vector2(20 * 20, 46 * 20);
             entityContainer.AddEntity(c);
 
@@ -52,9 +52,9 @@ namespace platformer
             tilemap = new Tilemap(50, 50, 20);
             camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, player.Position, 0, 1);
 
-            //Enemy enemy = new Enemy();
-            //enemy.Position = new Vector2(100, 100);
-            //entityContainer.AddEntity(enemy);
+            Enemy enemy = new Enemy();
+            enemy.Position = new Vector2(100, 100);
+            entityContainer.AddEntity(enemy);
 
             for (int i = 0; i < 40; i++)
             {
@@ -185,6 +185,11 @@ namespace platformer
             popup.Position = source.Position;
             entityContainer.AddEntity(popup);
             LevelData.score += score;
+        }
+
+        public void collectedCollectable()
+        {
+            LevelData.collectable = true;
         }
     }
 }

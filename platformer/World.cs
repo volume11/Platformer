@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Collections.Generic;
+using System;
 
 using platformer.entities;
 
@@ -9,6 +10,8 @@ namespace platformer
 {
     class World
     {
+        public event Action OnLevelEnd;
+
         public EntityContainer entityContainer;
 
         Tilemap tilemap;
@@ -16,36 +19,64 @@ namespace platformer
         Player player;
         Camera2D camera;
 
-        Vector2 gravity = new Vector2(0, 1.8f);
+        Vector2 gravity = new Vector2(0, 3f);
+
+        public LevelData LevelData;
 
         public World()
         {
             entityContainer = new EntityContainer(this);
+            LevelData = new LevelData();
 
             //Test Code
             player = new Player();
+            player.Position = new Vector2(20, 600);
             entityContainer.AddEntity(player);
 
+            Collectable col = new Collectable();
+            col.Position = new Vector2(90, 90);
+            entityContainer.AddEntity(col);
+
             Coin c = new Coin();
-            c.Position = new Vector2(100, 100);
+            c.Position = new Vector2(20 * 20, 46 * 20);
             entityContainer.AddEntity(c);
+
+            c = new Coin();
+            c.Position = new Vector2(19 * 20, 46 * 20);
+            entityContainer.AddEntity(c);
+
+            End e = new End();
+            e.Position = new Vector2(40 * 20, 49 * 20);
+            entityContainer.AddEntity(e);
 
             tilemap = new Tilemap(50, 50, 20);
             camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, player.Position, 0, 1);
 
-            Enemy e = new Enemy();
-            e.Position = new Vector2(100, 100);
-            entityContainer.AddEntity(e);
+            Enemy enemy = new Enemy();
+            enemy.Position = new Vector2(100, 100);
+            entityContainer.AddEntity(enemy);
 
-            tilemap.Tiles[100 * 5 + 5] = 1;
+            for (int i = 0; i < 40; i++)
+            {
+                tilemap.Tiles[50 * i + 6] = 1;
+            }
+
+            tilemap.Tiles[50 * 49 + 10] = 1;
+
+            tilemap.Tiles[50 * 48 + 15] = 1;
+            tilemap.Tiles[50 * 49 + 15] = 1;
+
+            tilemap.Tiles[50 * 48 + 22] = 1;
+            tilemap.Tiles[50 * 49 + 22] = 1;
         }
 
         public void Update()
         {
+            LevelData.time += Raylib.GetFrameTime();
+
             foreach (IEntity entity in entityContainer.Entities)
             {
                 entity.Update();
-
                 
                 if (entity is IKinematicBody)
                 {
@@ -135,6 +166,24 @@ namespace platformer
             }
 
             Raylib.EndMode2D();
+        }
+
+        public void EndLevel()
+        {
+            OnLevelEnd?.Invoke();
+        }
+
+        public void AddScore(int score, IEntity source)
+        {
+            ScorePopup popup = new ScorePopup(score);
+            popup.Position = source.Position;
+            entityContainer.AddEntity(popup);
+            LevelData.score += score;
+        }
+
+        public void collectedCollectable()
+        {
+            LevelData.collectable = true;
         }
     }
 }

@@ -5,7 +5,7 @@ using Raylib_cs;
 
 namespace platformer.entities
 {
-    class Player : IEntity, IPhysics
+    class Player : IEntity, IKinematicBody
     {
         public World World {get; set;}
         public Vector2 Position {get; set;}
@@ -15,19 +15,20 @@ namespace platformer.entities
 
         public Vector2 CollisionBoxSize => new Vector2(20, 40);
         public bool IsOnGround {get; set;}
-        public bool IsOnWall {get; set;}
+        public bool IsOnLeftWall {get; set;}
+        public bool IsOnRightWall {get; set;}
 
         float acceleration = 15;
-        float airAcceleration = 2;
-        float jumpAcceleration = 220;
+        float airAcceleration = 3;
+        float jumpAcceleration = 300;
         float wallSlide = 10;
         float maxSpeed = 200;
-        float groundDrag = 0.95f;
+        float groundDrag = 0.8f;
         float airDrag = 0.98f;
 
         public void Update()
         {
-            if (IsOnWall)
+            if (IsOnLeftWall || IsOnRightWall)
             {
                 if (Velocity.Y > 0)
                 {
@@ -36,13 +37,13 @@ namespace platformer.entities
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
                 {
-                    _Velocity = new Vector2(maxSpeed, -jumpAcceleration);
+                    _Velocity = new Vector2(maxSpeed * (IsOnLeftWall ? 1 : -1), -jumpAcceleration);
                 }
             }
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J) && IsOnGround)
             {
-                _Velocity.Y += -jumpAcceleration;
+                _Velocity.Y = -jumpAcceleration;
             }
 
             float dir = 0;
@@ -94,10 +95,21 @@ namespace platformer.entities
         {
             if (body is Coin)
             {
+                World.entityContainer.RemoveEntity(body);
+                World.AddScore(100, body);
+            }
+
+            if (body is Enemy)
+            {
                 if (Velocity.Y > 0)
                 {
                     World.entityContainer.RemoveEntity(body);
                     _Velocity.Y = -100;
+                    World.AddScore(1000, body);
+                }
+                else
+                {
+                    World.entityContainer.RemoveEntity(this);
                 }
             }
         }

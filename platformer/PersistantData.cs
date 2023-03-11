@@ -6,7 +6,6 @@ namespace platformer
     static class PersistentData
     {
         static SaveData data = new SaveData();
-        public static int Score {get {return data.Score;} set {data.Score = value;}}
 
         public static void Save()
         {
@@ -39,6 +38,6 @@ namespace platformer
 
     class SaveData
     {
-        public int Score {get; set;}
+        
     }
 }

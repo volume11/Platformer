@@ -20,7 +20,7 @@ namespace platformer.screens
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_R))
             {
-                ChangeScreen?.Invoke(new LevelScreen());
+                ChangeScreen?.Invoke(new LevelScreen(data.levelName));
             }
         }
 

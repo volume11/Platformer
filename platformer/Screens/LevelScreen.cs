@@ -13,9 +13,9 @@ namespace platformer.screens
 
         LevelData data;
 
-        public LevelScreen()
+        public LevelScreen(string LevelID)
         {
-            world = new World();
+            world = new World(LevelID);
             data = world.LevelData;
 
             world.OnLevelEnd += OnLevelEnd;
@@ -32,7 +32,7 @@ namespace platformer.screens
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_R))
             {
-                ChangeScreen?.Invoke(new LevelScreen());
+                ChangeScreen?.Invoke(new LevelScreen(data.levelName));
             }
         }
 

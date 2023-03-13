@@ -13,13 +13,13 @@ namespace platformer
             File.WriteAllText("assets/savedata/save.txt", jsonString);
         }
 
-        #nullable enable
         public static void Load()
         {
             //If the save data does not exist create the file and save empty data to it
             if (!File.Exists("assets/savedata/save.txt"))
             {
                 File.Create("assets/savedata/save.txt").Close();
+                ResetData();
                 Save();
                 return;
             }
@@ -31,13 +31,20 @@ namespace platformer
             catch
             {
                 //If the save data file is corrupt in some way (cannot be deserialised to the save data class), wipe the save data file with the defaults
+                ResetData();
                 Save();
             }
+        }
+
+        static void ResetData()
+        {
+            data = new SaveData();
+            data.currentLevel = AssetManager.GetFirstLevel();
         }
     }
 
     class SaveData
     {
-        
+        public string currentLevel;
     }
 }

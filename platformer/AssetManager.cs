@@ -11,6 +11,8 @@ namespace platformer
         static Dictionary<string, Sound> sounds = new Dictionary<string, Sound>();
         static Dictionary<string, Music> music = new Dictionary<string, Music>();
 
+        static List<string> levels = new List<string>();
+
         public static void Init()
         {
             textures.Clear();
@@ -35,6 +37,19 @@ namespace platformer
                 Music m = Raylib.LoadMusicStream(path);
                 string key = Path.GetFileNameWithoutExtension(path);
                 music.Add(key, m);
+            }
+
+            levels.Clear();
+            foreach (string level in File.ReadLines("assets/levels/index.txt"))
+            {
+                if (File.Exists($"assets/levels/{level}.txt"))
+                {
+                    levels.Add(level);
+                }
+                else
+                {
+                    throw new System.Exception($"Loading level that does not exist: {level}.txt");
+                }
             }
         }
 
@@ -65,6 +80,26 @@ namespace platformer
                 return new Optional<Music>(m);
             }
             return new Optional<Music>();
+        }
+
+        public static string GetFirstLevel()
+        {
+            return levels[0];
+        }
+
+        public static string GetNextLevel(string CurrentLevel)
+        {
+            int index = levels.IndexOf(CurrentLevel);
+            if (index + 1 > levels.Count)
+            {
+                return "win";
+            }
+            return levels[index + 1];
+        }
+
+        public static string[] GetAllLevels()
+        {
+            return levels.ToArray();
         }
     }
 }

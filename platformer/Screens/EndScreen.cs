@@ -11,9 +11,25 @@ namespace platformer.screens
 
         LevelData data;
 
+        bool finalLevel;
+
         public EndScreen(LevelData data)
         {
             this.data = data;
+        }
+
+        public void Start()
+        {
+            string nextLevel = AssetManager.GetNextLevel(data.levelName);
+            if (nextLevel == "win")
+            {
+                finalLevel = true;
+            }
+            else
+            {
+                PersistentData.CurrentLevel = nextLevel;
+                PersistentData.Save();
+            }
         }
 
         public void Update()
@@ -24,17 +40,13 @@ namespace platformer.screens
             }
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
             {
-                string nextLevel = AssetManager.GetNextLevel(data.levelName);
-
-                if (nextLevel == "win")
+                if (finalLevel)
                 {
                     ChangeScreen?.Invoke(new WinScreen());
                 }
                 else
                 {
-                    ChangeScreen?.Invoke(new LevelScreen(AssetManager.GetNextLevel(data.levelName)));
-                    PersistentData.CurrentLevel = AssetManager.GetNextLevel(data.levelName);
-                    PersistentData.Save();
+                    ChangeScreen?.Invoke(new LevelScreen(PersistentData.CurrentLevel));
                 }
             }
         }

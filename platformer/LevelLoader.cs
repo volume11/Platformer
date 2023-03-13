@@ -1,4 +1,6 @@
 using System.IO;
+using System.Collections.Generic;
+using System;
 
 using platformer.entities;
 using System.Numerics;
@@ -7,6 +9,12 @@ namespace platformer
 {
     static class LevelLoader
     {
+        static Dictionary<string, Type> entityLookup = new Dictionary<string, Type>{
+            {"walker", typeof(Walker)},
+            {"fly", typeof(Fly)},
+            {"thrower", typeof(Thrower)},
+        };
+
         public static Level Load(string LevelID, World world)
         {
             Level level = new Level();
@@ -21,10 +29,10 @@ namespace platformer
 
             for (int i = 0; i < height; i++)
             {
-                string line = reader.ReadLine();
+                string tileline = reader.ReadLine();
                 for (int ii = 0; ii < width; ii++)
                 {
-                    level.tilemap.Tiles[i * width + ii] = line[ii] == '~' ? 0 : 1;
+                    level.tilemap.Tiles[i * width + ii] = tileline[ii] == '~' ? 0 : 1;
                 }
             }
             
@@ -48,6 +56,14 @@ namespace platformer
             Collectable c = new Collectable();
             c.Position = new Vector2(cx, cy);
             level.entityContainer.AddEntity(c);
+
+            while (!reader.EndOfStream)
+            {
+                string[] entityArgs = reader.ReadLine().Split();
+                IEntity entity = (IEntity)Activator.CreateInstance(entityLookup[entityArgs[0]]);
+                entity.Position = new Vector2(int.Parse(entityArgs[1]), int.Parse(entityArgs[2]));
+                level.entityContainer.AddEntity(entity);
+            }
 
             reader.Close();
 

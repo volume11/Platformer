@@ -12,9 +12,10 @@ namespace platformer
         public void Run()
         {
             //INITIALIZE
-            Raylib.InitWindow(500, 500, "Platformer");
+            Raylib.InitWindow(1600, 800, "Platformer");
             Raylib.InitAudioDevice();
             Raylib.SetTargetFPS(200);
+            Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT);
 
             AssetManager.Init();
             PersistentData.Load();

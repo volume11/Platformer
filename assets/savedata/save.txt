@@ -4,13 +4,13 @@
     "jump": {
       "levelName": "jump",
       "score": 2000,
-      "time": 1.470991,
+      "time": 1.3204855,
       "collectable": true
     },
     "run": {
       "levelName": "run",
       "score": 2000,
-      "time": 0.9211254,
+      "time": 1.3366305,
       "collectable": true
     }
   }

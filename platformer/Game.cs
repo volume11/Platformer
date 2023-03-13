@@ -9,6 +9,8 @@ namespace platformer
         IScreen currentScreen = null;
         IScreen queuedScreen = null;
 
+        bool shouldClose;
+
         public void Run()
         {
             //INITIALIZE
@@ -22,7 +24,7 @@ namespace platformer
 
             queuedScreen = new MenuScreen();
 
-            while (!Raylib.WindowShouldClose())
+            while (!shouldClose)
             {
                 if (queuedScreen != null)
                 {
@@ -57,7 +59,15 @@ namespace platformer
                 Raylib.EndDrawing();
 
                 Raylib.UpdateMusicStream(SoundManager.currentTrack);
+
+                if (Raylib.WindowShouldClose())
+                {
+                    shouldClose = true;
+                }
             }
+
+            Raylib.CloseWindow();
+            Raylib.CloseAudioDevice();
         }
 
         void ChangeScreen(IScreen screen)
@@ -67,8 +77,7 @@ namespace platformer
 
         void EndGame()
         {
-            Raylib.CloseWindow();
-            Raylib.CloseAudioDevice();
+            shouldClose = true;
         }
     }
 }

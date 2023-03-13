@@ -22,6 +22,21 @@ namespace platformer.screens
             {
                 ChangeScreen?.Invoke(new LevelScreen(data.levelName));
             }
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
+            {
+                string nextLevel = AssetManager.GetNextLevel(data.levelName);
+
+                if (nextLevel == "win")
+                {
+                    ChangeScreen?.Invoke(new WinScreen());
+                }
+                else
+                {
+                    ChangeScreen?.Invoke(new LevelScreen(AssetManager.GetNextLevel(data.levelName)));
+                    PersistentData.CurrentLevel = AssetManager.GetNextLevel(data.levelName);
+                    PersistentData.Save();
+                }
+            }
         }
 
         public void Render()

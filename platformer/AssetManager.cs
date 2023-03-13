@@ -90,7 +90,7 @@ namespace platformer
         public static string GetNextLevel(string CurrentLevel)
         {
             int index = levels.IndexOf(CurrentLevel);
-            if (index + 1 > levels.Count)
+            if (index + 1 >= levels.Count)
             {
                 return "win";
             }

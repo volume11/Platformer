@@ -7,6 +7,8 @@ namespace platformer
     {
         static SaveData data = new SaveData();
 
+        public static string CurrentLevel { get => data.currentLevel; set => data.currentLevel = value; }
+
         public static void Save()
         {
             string jsonString = JsonSerializer.Serialize<SaveData>(data);
@@ -45,6 +47,6 @@ namespace platformer
 
     class SaveData
     {
-        public string currentLevel;
+        public string currentLevel {get; set;}
     }
 }

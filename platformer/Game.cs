@@ -20,9 +20,7 @@ namespace platformer
             AssetManager.Init();
             PersistentData.Load();
 
-            //----TEST CODE----
-            queuedScreen = new LevelScreen(AssetManager.GetFirstLevel());
-            //-----------------
+            queuedScreen = new MenuScreen();
 
             while (!Raylib.WindowShouldClose())
             {

@@ -93,13 +93,14 @@ namespace platformer.entities
                 World.AddScore(100, body);
             }
   
-            if (body is Enemy)
+            if (body is IEnemy)
             {
                 if (Velocity.Y > 0)
                 {
+                    IEnemy e = body as IEnemy;
                     World.entityContainer.RemoveEntity(body);
                     _Velocity.Y = -100;
-                    World.AddScore(1000, body);
+                    World.AddScore(e.Score, body);
                 }
                 else
                 {

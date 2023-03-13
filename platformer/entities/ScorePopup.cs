@@ -31,7 +31,7 @@ namespace platformer.entities
 
         public void Render()
         {
-            Raylib.DrawText(score.ToString(), (int)Position.X, (int)Position.Y, 10, Color.BLACK);
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), score.ToString(), Position, 10, 1, Color.BLACK);
         }
     }
 }

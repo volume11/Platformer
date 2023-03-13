@@ -16,10 +16,11 @@ namespace platformer
 
         Tilemap tilemap;
 
-        Player player;
         Camera2D camera;
 
-        Vector2 gravity = new Vector2(0, 3f);
+        public Vector2 gravity => new Vector2(0, 3f);
+
+        public Player Player {get;}
 
         public LevelData LevelData;
 
@@ -29,9 +30,9 @@ namespace platformer
             LevelData = new LevelData();
 
             //Test Code
-            player = new Player();
-            player.Position = new Vector2(20, 600);
-            entityContainer.AddEntity(player);
+            Player = new Player();
+            Player.Position = new Vector2(20, 48 * 20 - 5);
+            entityContainer.AddEntity(Player);
 
             Collectable col = new Collectable();
             col.Position = new Vector2(90, 90);
@@ -45,16 +46,16 @@ namespace platformer
             c.Position = new Vector2(19 * 20, 46 * 20);
             entityContainer.AddEntity(c);
 
-            End e = new End();
-            e.Position = new Vector2(40 * 20, 49 * 20);
-            entityContainer.AddEntity(e);
+            //End e = new End();
+            //e.Position = new Vector2(40 * 20, 48 * 20);
+            //entityContainer.AddEntity(e);
 
             tilemap = new Tilemap(50, 50, 20);
-            camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, player.Position, 0, 1);
+            camera = new Camera2D(new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight()) / 2, Player.Position, 0, 1);
 
-            Enemy enemy = new Enemy();
-            enemy.Position = new Vector2(100, 100);
-            entityContainer.AddEntity(enemy);
+            Walker walker = new Walker();
+            walker.Position = new Vector2(800, 47 * 20 - 5);
+            entityContainer.AddEntity(walker);
 
             for (int i = 0; i < 40; i++)
             {
@@ -149,7 +150,7 @@ namespace platformer
                 }
             }
 
-            camera.target = player.Position;
+            camera.target = Player.Position;
 
             entityContainer.Flush();
         }

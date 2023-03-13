@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace platformer.entities
 {
-    class Enemy : IKinematicBody
+    class Walker : IEnemy
     {
         public Vector2 Position {get; set;}
 
@@ -14,6 +14,7 @@ namespace platformer.entities
         public bool IsOnLeftWall {get; set;}
         public bool IsOnRightWall {get; set;}
         
+        public int Score => 1000;
 
         public Vector2 CollisionBoxSize => new Vector2(20, 20);
         public World World {get; set;}
@@ -25,7 +26,7 @@ namespace platformer.entities
                 dir *= -1;
             }
 
-            _velocity.X = 20 * dir;
+            _velocity.X = 100 * dir;
         }
 
         public void Render()

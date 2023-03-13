@@ -20,6 +20,8 @@ namespace platformer.screens
 
         public void Start()
         {
+            PersistentData.SetLevelData(data.levelName, data);
+
             string nextLevel = AssetManager.GetNextLevel(data.levelName);
             if (nextLevel == "win")
             {
@@ -28,8 +30,9 @@ namespace platformer.screens
             else
             {
                 PersistentData.CurrentLevel = nextLevel;
-                PersistentData.Save();
             }
+
+            PersistentData.Save();
         }
 
         public void Update()

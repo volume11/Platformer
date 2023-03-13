@@ -1,1 +1,17 @@
-{"currentLevel":"run"}
+{
+  "currentLevel": "run",
+  "levelScores": {
+    "jump": {
+      "levelName": "jump",
+      "score": 2000,
+      "time": 1.470991,
+      "collectable": true
+    },
+    "run": {
+      "levelName": "run",
+      "score": 2000,
+      "time": 0.9211254,
+      "collectable": true
+    }
+  }
+}

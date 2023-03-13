@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace platformer
 {
@@ -9,9 +10,21 @@ namespace platformer
 
         public static string CurrentLevel { get => data.currentLevel; set => data.currentLevel = value; }
 
+        public static LevelData GetLevelData(string LevelID)
+        {
+            return data.levelScores[LevelID];
+        }
+
+        public static void SetLevelData(string LevelID, LevelData levelData)
+        {
+            data.levelScores[LevelID] = levelData;
+        }
+
         public static void Save()
         {
-            string jsonString = JsonSerializer.Serialize<SaveData>(data);
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            string jsonString = JsonSerializer.Serialize<SaveData>(data, options);
             File.WriteAllText("assets/savedata/save.txt", jsonString);
         }
 
@@ -42,11 +55,20 @@ namespace platformer
         {
             data = new SaveData();
             data.currentLevel = AssetManager.GetFirstLevel();
+
+            data.levelScores = new Dictionary<string, LevelData>();
+            foreach (string level in AssetManager.GetAllLevels())
+            {
+                LevelData levelData = new LevelData();
+                levelData.levelName = level;
+                data.levelScores.Add(level, levelData);
+            }
         }
     }
 
     class SaveData
     {
         public string currentLevel {get; set;}
+        public Dictionary<string, LevelData> levelScores {get; set;}
     }
 }
